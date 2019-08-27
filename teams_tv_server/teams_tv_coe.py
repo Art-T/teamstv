@@ -120,6 +120,7 @@ def get_image_list(folder):
     filelist = get_folder_images(folder)
     with_mtime = request.args.get('mtime', None)
     with_hash = request.args.get('hash', with_mtime)
+    with_description = request.args.get("description", None)
     app.logger.info("hash param is {0}".format(with_hash))
     order = request.args.get('order', "name")
     app.logger.info("order param is {0}".format(order))
@@ -129,15 +130,24 @@ def get_image_list(folder):
                     sorted((os.stat(path).st_mtime, path) for path in filelist)]
     else:
         filelist = sorted(filelist)
-
+    image_list = \
+            [
+                {
+                    "image": "images/" + folder + "/" + os.path.basename(file),
+                    "description": get_description_list(folder, file)
+                }
+            for file in filelist] if with_description else \
+            [
+                "images/" + folder + "/" + os.path.basename(file)
+            for file in filelist]
     if with_hash is None:
         app.logger.info("Serving simple image list")
-        return json.dumps(["images/" + folder + "/" + os.path.basename(file) for file in filelist])
+        return json.dumps(image_list)
     else:
         mtime = get_last_mtime(filelist)
         app.logger.info("Serving images with mtime")
         return json.dumps({
-            "images": ["images/" + folder + "/" + os.path.basename(file) for file in filelist],
+            "images": image_list,
             "last_m_hash": hash(mtime) + hash(len(filelist))
         }, cls=misc.DateTimeEncoder)
 
@@ -145,10 +155,11 @@ def get_image_list(folder):
 @app.route("/descriptions/<folder>/<file>")
 def get_description_list(folder, file):
     app.logger.info("Serving {0} description from {1}".format(folder, file))
-    filename = get_file_abs_path(file, folder)
+    description_file = "{0}.txt".format(os.path.splitext(file)[0])
+    filename = get_file_abs_path(description_file, folder)
     if not os.path.exists(filename):
         return ""
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding='utf-8') as f:
         return f.read()
 
 

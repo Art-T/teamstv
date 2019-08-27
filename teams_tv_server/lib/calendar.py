@@ -126,7 +126,8 @@ def get_now(time_source):
     else:
         try:
             response = requests.get(time_source)
-            return parser.parse(response.content)
+            time_source_utc = parser.parse(response.content).astimezone(pytz.utc) # CalDav drops the timezone, so the time should be in UTC
+            return time_source_utc
         except requests.exceptions.BaseHTTPError as e:
             now = datetime.now(pytz.utc)
             print("something went wrong during getting time from {0}:\n{1}\nRETURNING LOCAL {2}".format(time_source,
@@ -147,4 +148,5 @@ def get_current_events(calendars, time_source):
     :param calendars([calendar]):list of available calendars, active
     :return ([{event}]): list of obtained events for current moment
     """
+
     return get_events(calendars, get_now(time_source), get_now(time_source))
