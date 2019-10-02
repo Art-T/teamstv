@@ -4,7 +4,8 @@ import static com.teamstv.telegrambot.BotReplies.REMOVE;
 import static com.teamstv.telegrambot.model.BotCommandsEnum.LIST;
 
 import com.teamstv.telegrambot.handlers.messages.Response;
-import com.teamstv.telegrambot.handlers.messages.TextResponse;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.Keyboard;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.TransferService;
@@ -24,8 +25,9 @@ public class ListCommandHandler extends Handler {
 
   protected ListCommandHandler(
       TransferService<Integer, Photo> transferService,
+      ResponseFactory factory,
       Keyboard keyboard) {
-    super(transferService);
+    super(transferService, factory);
     this.keyboard = keyboard;
   }
 
@@ -67,6 +69,6 @@ public class ListCommandHandler extends Handler {
 
   @Override
   Response getResponse() {
-    return new TextResponse(REMOVE.getResponse(), update);
+    return factory.getResponse(REMOVE.getResponse(), update, ResponseTypes.TEXT);
   }
 }

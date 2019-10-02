@@ -2,8 +2,9 @@ package com.teamstv.telegrambot.handlers;
 
 import static com.teamstv.telegrambot.BotReplies.SEND_CAPTION;
 
-import com.teamstv.telegrambot.handlers.messages.CallbackResponse;
 import com.teamstv.telegrambot.handlers.messages.Response;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.ButtonNameEnum;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.TransferService;
@@ -21,8 +22,9 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 public class CaptionCallbackHandler extends CallbackHandler {
 
   public CaptionCallbackHandler(
-      TransferService<Integer, Photo> transferService) {
-    super(transferService);
+      TransferService<Integer, Photo> transferService,
+      ResponseFactory factory) {
+    super(transferService, factory);
   }
 
   @Override
@@ -39,6 +41,6 @@ public class CaptionCallbackHandler extends CallbackHandler {
 
   @Override
   Response getResponse() {
-    return new CallbackResponse(SEND_CAPTION.getResponse(), update);
+    return factory.getResponse(SEND_CAPTION.getResponse(), update, ResponseTypes.CALLBACK);
   }
 }

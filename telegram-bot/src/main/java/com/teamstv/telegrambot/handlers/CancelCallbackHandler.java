@@ -2,8 +2,9 @@ package com.teamstv.telegrambot.handlers;
 
 import static com.teamstv.telegrambot.BotReplies.CLEAN_UP;
 
-import com.teamstv.telegrambot.handlers.messages.CallbackResponse;
 import com.teamstv.telegrambot.handlers.messages.Response;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.ButtonNameEnum;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.TransferService;
@@ -22,8 +23,9 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 public class CancelCallbackHandler extends CallbackHandler {
 
   public CancelCallbackHandler(
-      TransferService<Integer, Photo> transferService) {
-    super(transferService);
+      TransferService<Integer, Photo> transferService,
+      ResponseFactory factory) {
+    super(transferService, factory);
   }
 
   @Override
@@ -45,6 +47,6 @@ public class CancelCallbackHandler extends CallbackHandler {
 
   @Override
   Response getResponse() {
-    return new CallbackResponse(CLEAN_UP.getResponse(), update);
+    return factory.getResponse(CLEAN_UP.getResponse(), update, ResponseTypes.CALLBACK);
   }
 }

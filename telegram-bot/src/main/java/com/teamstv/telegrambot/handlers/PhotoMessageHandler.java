@@ -3,7 +3,8 @@ package com.teamstv.telegrambot.handlers;
 import static com.teamstv.telegrambot.BotReplies.THANKS_FOR_PHOTO;
 
 import com.teamstv.telegrambot.handlers.messages.Response;
-import com.teamstv.telegrambot.handlers.messages.TextResponse;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.Keyboard;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.IdGenerator;
@@ -31,8 +32,9 @@ public class PhotoMessageHandler extends Handler {
   public PhotoMessageHandler(
       Keyboard keyboard,
       TransferService<Integer, Photo> transferService,
+      ResponseFactory factory,
       IdGenerator<Integer> generator) {
-    super(transferService);
+    super(transferService, factory);
     this.keyboard = keyboard;
     this.generator = generator;
   }
@@ -42,7 +44,7 @@ public class PhotoMessageHandler extends Handler {
     return update.getMessage()
         .getPhoto()
         .stream()
-        .min(Comparator.comparing(PhotoSize::getFileSize));
+        .max(Comparator.comparing(PhotoSize::getFileSize));
   }
 
   @Override
@@ -63,6 +65,6 @@ public class PhotoMessageHandler extends Handler {
 
   @Override
   Response getResponse() {
-    return new TextResponse(THANKS_FOR_PHOTO.getResponse(), update);
+    return factory.getResponse(THANKS_FOR_PHOTO.getResponse(), update, ResponseTypes.TEXT);
   }
 }

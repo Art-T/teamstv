@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class IdGeneratorImpl implements IdGenerator<Integer> {
 
-  private static final AtomicInteger generator = new AtomicInteger(0);
+  private int generator = 0;
 
   @Override
   public Integer getUniq() {
-    if (generator.get() == Integer.MAX_VALUE) {
-      generator.set(0);
+    if (generator  == Integer.MAX_VALUE) {
+      generator = 0;
     }
-    return generator.incrementAndGet();
+    return ++generator;
   }
 }

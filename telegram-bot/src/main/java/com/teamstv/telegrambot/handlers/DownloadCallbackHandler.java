@@ -3,8 +3,9 @@ package com.teamstv.telegrambot.handlers;
 import static com.teamstv.telegrambot.BotReplies.LOAD_COMPLETED;
 
 import com.teamstv.telegrambot.BotProperties;
-import com.teamstv.telegrambot.handlers.messages.CallbackResponse;
 import com.teamstv.telegrambot.handlers.messages.Response;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.ButtonNameEnum;
 import com.teamstv.telegrambot.model.Keyboard;
 import com.teamstv.telegrambot.model.Photo;
@@ -38,9 +39,10 @@ public class DownloadCallbackHandler extends CallbackHandler {
 
   public DownloadCallbackHandler(
       TransferService<Integer, Photo> transferService,
+      ResponseFactory factory,
       Keyboard keyboard,
       BotProperties properties) {
-    super(transferService);
+    super(transferService, factory);
     this.keyboard = keyboard;
     this.properties = properties;
 
@@ -51,7 +53,7 @@ public class DownloadCallbackHandler extends CallbackHandler {
     Optional<Photo> optionalModel = getPhotoModel(ButtonNameEnum.DOWNLOAD);
     optionalModel.ifPresent(
         model -> {
-          String fileId = model.getPhotoSize().getFileId();
+          String fileId = model.getFileId();
           try {
             log.info("Found entry for fileId ={}", fileId);
             saveFile(model);
@@ -71,7 +73,7 @@ public class DownloadCallbackHandler extends CallbackHandler {
 
   @Override
   Response getResponse() {
-    return new CallbackResponse(LOAD_COMPLETED.getResponse(), update);
+    return factory.getResponse(LOAD_COMPLETED.getResponse(), update, ResponseTypes.CALLBACK);
   }
 
   private void saveFile(Photo model) throws TelegramApiException {

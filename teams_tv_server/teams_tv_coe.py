@@ -55,6 +55,10 @@ def show_clock():
     app.logger.info("Serving clock.html")
     return render_template("clock.html")
 
+@app.route('/twitter')
+def show_twitter():
+    app.logger.info("Serving twitter.html")
+    return render_template("twitter.html")
 
 @app.route("/test_json")
 def test_json():

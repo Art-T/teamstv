@@ -122,7 +122,7 @@ $(function() {
         var cid = "news_"+id;
 
         $("#"+id).html("");
-        $("#"+id).append("<iframe id='" + cid + "' src='/news?" + $.param(options) + "'></iframe>"); // Let it live in IFRAME
+        $("#"+id).append("<iframe id='" + cid + "' src='/twitter?" + $.param(options) + "'></iframe>"); // Let it live in IFRAME
     }
 
     function placeHtml(id, options) {

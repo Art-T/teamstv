@@ -43,7 +43,7 @@ public class Photo {
     this.photoLocalPath = photoLocalPath;
   }
 
-  public boolean hasCaption() {
+  boolean hasCaption() {
     return caption != null;
   }
 
@@ -75,7 +75,7 @@ public class Photo {
     this.caption = caption;
   }
 
-  public boolean isListed() {
+  boolean isListed() {
     return listed;
   }
 

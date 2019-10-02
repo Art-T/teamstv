@@ -8,7 +8,7 @@ public class TextResponse extends Response<String> {
 
   private final SendMessage sendMessage;
 
-  public TextResponse(String msg, Update update) {
+  TextResponse(String msg, Update update) {
     super(msg, update);
     sendMessage = new SendMessage();
   }

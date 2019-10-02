@@ -33,10 +33,6 @@ public class TeamsTVBot extends TelegramLongPollingBot {
     return botProperties.getToken();
   }
 
-  public BotProperties getBotProperties() {
-    return botProperties;
-  }
-
   @Override
   public synchronized void onUpdateReceived(Update update) {
     factory.getHandler(update).ifPresent(h -> {
@@ -48,9 +44,6 @@ public class TeamsTVBot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdatesReceived(List<Update> updates) {
-    updates.stream()
-        .parallel()
-        .unordered()
-        .forEach(this::onUpdateReceived);
+    updates.forEach(this::onUpdateReceived);
   }
 }

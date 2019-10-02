@@ -8,7 +8,7 @@ public class CallbackResponse extends Response<String> {
 
   private final EditMessageText editMessageText;
 
-  public CallbackResponse(String msg, Update update) {
+  CallbackResponse(String msg, Update update) {
     super(msg, update);
     editMessageText = new EditMessageText();
   }

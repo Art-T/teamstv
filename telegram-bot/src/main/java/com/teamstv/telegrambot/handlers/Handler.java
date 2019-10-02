@@ -3,7 +3,8 @@ package com.teamstv.telegrambot.handlers;
 import static com.teamstv.telegrambot.BotReplies.NULL_USER;
 
 import com.teamstv.telegrambot.handlers.messages.Response;
-import com.teamstv.telegrambot.handlers.messages.TextResponse;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.TransferService;
 import java.io.Serializable;
@@ -31,10 +32,13 @@ public abstract class Handler {
   Update update;
   DefaultAbsSender sender;
   Logger log = LoggerFactory.getLogger(Handler.class);
+  final ResponseFactory factory;
 
   protected Handler(
-      TransferService<Integer, Photo> transferService) {
+      TransferService<Integer, Photo> transferService,
+      ResponseFactory factory) {
     this.transferService = transferService;
+    this.factory = factory;
   }
 
   public void setUpdate(Update update) {
@@ -77,7 +81,7 @@ public abstract class Handler {
   abstract Response getResponse();
 
   private void nullUserAction() {
-    Response msg = new TextResponse(NULL_USER.getResponse(), update);
+    Response msg = factory.getResponse(NULL_USER.getResponse(), update, ResponseTypes.TEXT);
     sendText(createResponse(msg));
   }
 

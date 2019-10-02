@@ -5,7 +5,8 @@ import static com.teamstv.telegrambot.BotReplies.THANKS_FOR_CAPTION;
 
 import com.teamstv.telegrambot.BotProperties;
 import com.teamstv.telegrambot.handlers.messages.Response;
-import com.teamstv.telegrambot.handlers.messages.TextResponse;
+import com.teamstv.telegrambot.handlers.messages.ResponseFactory;
+import com.teamstv.telegrambot.handlers.messages.ResponseTypes;
 import com.teamstv.telegrambot.model.Keyboard;
 import com.teamstv.telegrambot.model.Photo;
 import com.teamstv.telegrambot.services.TransferService;
@@ -36,8 +37,9 @@ public class TextMessageHandler extends Handler {
 
   public TextMessageHandler(
       TransferService<Integer, Photo> transferService,
+      ResponseFactory factory,
       Keyboard keyboard, BotProperties properties) {
-    super(transferService);
+    super(transferService, factory);
     this.keyboard = keyboard;
     this.properties = properties;
   }
@@ -78,7 +80,7 @@ public class TextMessageHandler extends Handler {
     } else {
       msg = TEXT_NOT_SUPPORTED.getResponse();
     }
-    return new TextResponse(msg, update);
+    return factory.getResponse(msg, update, ResponseTypes.TEXT);
   }
 
   private void saveCaption(Path path, String msg) {
